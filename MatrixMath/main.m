@@ -22,6 +22,12 @@ int main(int argc, const char * argv[]) {
         NSLog(@"Testing nullspace...");
         matrix = [[ANMatrix alloc] initWithString:@"-1 1 0; 0 -1 1; 1 0 -1"];
         NSLog(@"Closed loop nullspace basis:\n%@", [matrix nullspaceBasis]);
+        NSLog(@"Testing solution finder...");
+        matrix = [[ANMatrix alloc] initWithString:@"1 2 3; 3 4 5; 6 7 0"];
+        ANMatrix * result = [[ANMatrix alloc] initWithString:@"1; 2; 3"];
+        ANMatrix * solution = [matrix specialSolution:result];
+        NSLog(@"solution:\n%@\nreal solution:\n%@", solution,
+              [[matrix reducedRowEchelonTransform:NULL] multiply:result]);
     }
     return 0;
 }
