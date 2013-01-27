@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FA60420D16B4E86100DE4F4C /* ANMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = FA60420C16B4E86100DE4F4C /* ANMatrix.m */; };
 		FA8EC78B16B1DE6600986066 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FA8EC78A16B1DE6600986066 /* Foundation.framework */; };
 		FA8EC79216B1DE6600986066 /* MatrixMath.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = FA8EC79116B1DE6600986066 /* MatrixMath.1 */; };
 		FA8EC79B16B1DE7800986066 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8EC79816B1DE7800986066 /* main.m */; };
-		FA8EC79C16B1DE7800986066 /* ANMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = FA8EC79916B1DE7800986066 /* ANMatrix.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,13 +27,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FA60420B16B4E86100DE4F4C /* ANMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANMatrix.h; sourceTree = "<group>"; };
+		FA60420C16B4E86100DE4F4C /* ANMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANMatrix.m; sourceTree = "<group>"; };
 		FA8EC78616B1DE6600986066 /* MatrixMath */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = MatrixMath; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA8EC78A16B1DE6600986066 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		FA8EC79016B1DE6600986066 /* MatrixMath-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MatrixMath-Prefix.pch"; sourceTree = "<group>"; };
 		FA8EC79116B1DE6600986066 /* MatrixMath.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = MatrixMath.1; sourceTree = "<group>"; };
 		FA8EC79816B1DE7800986066 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		FA8EC79916B1DE7800986066 /* ANMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ANMatrix.m; sourceTree = "<group>"; };
-		FA8EC79A16B1DE7800986066 /* ANMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ANMatrix.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,8 +76,8 @@
 		FA8EC78C16B1DE6600986066 /* MatrixMath */ = {
 			isa = PBXGroup;
 			children = (
-				FA8EC79A16B1DE7800986066 /* ANMatrix.h */,
-				FA8EC79916B1DE7800986066 /* ANMatrix.m */,
+				FA60420B16B4E86100DE4F4C /* ANMatrix.h */,
+				FA60420C16B4E86100DE4F4C /* ANMatrix.m */,
 				FA8EC79816B1DE7800986066 /* main.m */,
 				FA8EC79116B1DE6600986066 /* MatrixMath.1 */,
 				FA8EC78F16B1DE6600986066 /* Supporting Files */,
@@ -145,7 +145,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA8EC79B16B1DE7800986066 /* main.m in Sources */,
-				FA8EC79C16B1DE7800986066 /* ANMatrix.m in Sources */,
+				FA60420D16B4E86100DE4F4C /* ANMatrix.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +242,7 @@
 				FA8EC79716B1DE6600986066 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

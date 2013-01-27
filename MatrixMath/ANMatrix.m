@@ -8,6 +8,8 @@
 
 #import "ANMatrix.h"
 
+#define kTinyFloat 0.000001
+
 @interface ANMatrix (Private)
 
 - (id)initWithRows:(int)rows columns:(int)columns data:(float **)theData;
@@ -183,6 +185,7 @@
                 float otherValue = [anotherMatrix itemAtRow:i column:column];
                 sum += ourValue * otherValue;
             }
+            if (fabsf(sum) < kTinyFloat) sum = 0;
             [newMatrix setItem:sum atRow:row column:column];
         }
     }
@@ -212,15 +215,16 @@
             transformation = [exchange multiply:transformation];
             workingMatrix = [exchange multiply:workingMatrix];
         }
-        pivotsCompleted += 1;
         // subtract the right amount of the pivot row from the lower rows
         if (rank) *rank += 1;
-        float pivotValue = [workingMatrix itemAtRow:column column:column];
+        float pivotValue = [workingMatrix itemAtRow:pivotsCompleted column:column];
+        pivotsCompleted += 1;
+
         ANMatrix * subtractionMatrix = [ANMatrix identityMatrix:[workingMatrix rowCount]];
-        for (int rowReduce = column + 1; rowReduce < [workingMatrix rowCount]; rowReduce++) {
+        for (int rowReduce = pivotsCompleted; rowReduce < [workingMatrix rowCount]; rowReduce++) {
             if ([workingMatrix itemAtRow:rowReduce column:column] != 0) {
                 float subtractAmount = [workingMatrix itemAtRow:rowReduce column:column] / pivotValue;
-                [subtractionMatrix setItem:-subtractAmount atRow:rowReduce column:column];
+                [subtractionMatrix setItem:-subtractAmount atRow:rowReduce column:(pivotsCompleted - 1)];
             }
         }
         transformation = [subtractionMatrix multiply:transformation];
@@ -232,29 +236,30 @@
 - (ANMatrix *)reducedRowEchelonTransform:(int *)rank {
     ANMatrix * transform = [self rowEchelonTransform:rank];
     ANMatrix * workingMatrix = [transform multiply:self];
-    // subtract each row from the one above it to reduce the row echelon form
-    for (int row = 1; row < [workingMatrix rowCount]; row++) {
-        int firstColumn = -1;
-        for (int i = 0; i < [workingMatrix columnCount]; i++) {
-            if ([workingMatrix itemAtRow:row column:i] != 0) {
-                firstColumn = i;
+    
+    for (int row = workingMatrix.rowCount - 1; row >= 0; row--) {
+        int pivotColumn = -1;
+        for (int i = 0; i < workingMatrix.columnCount; i++) {
+            if (fabsf([workingMatrix itemAtRow:row column:i]) > kTinyFloat) { // pretty safe to assume it's valid
+                pivotColumn = i;
                 break;
             }
         }
-        if (firstColumn < 0) continue;
-        float deduceValue = [workingMatrix itemAtRow:row column:firstColumn];
+        if (pivotColumn < 0) continue;
+        float pivotValue = [workingMatrix itemAtRow:row column:pivotColumn];
         ANMatrix * deduceMatrix = [ANMatrix identityMatrix:[transform rowCount]];
-        [deduceMatrix setItem:1/deduceValue atRow:row column:firstColumn];
-        for (int deduceRow = row - 1; deduceRow >= 0; deduceRow--) {
-            float columnValue = [workingMatrix itemAtRow:deduceRow column:firstColumn];
+        for (int i = row - 1; i >= 0; i--) {
+            float columnValue = [workingMatrix itemAtRow:i column:pivotColumn];
             if (columnValue != 0) {
-                float subtractScale = columnValue / deduceValue;
-                [deduceMatrix setItem:-subtractScale atRow:deduceRow column:firstColumn];
+                float reduceScale = columnValue / pivotValue;
+                [deduceMatrix setItem:-reduceScale atRow:i column:row];
             }
         }
+        [deduceMatrix setItem:(1 / pivotValue) atRow:row column:pivotColumn];
         transform = [deduceMatrix multiply:transform];
         workingMatrix = [deduceMatrix multiply:workingMatrix];
     }
+    
     return transform;
 }
 
@@ -262,7 +267,7 @@
 
 - (ANMatrix *)nullspaceBasis {
     int rank;
-    ANMatrix * reducedRowEchelon = [[self rowEchelonTransform:&rank] multiply:self];
+    ANMatrix * reducedRowEchelon = [[self reducedRowEchelonTransform:&rank] multiply:self];
     if (rank == [self columnCount]) return nil; // nullspace is empty
     int * columnTypes = (int *)malloc(sizeof(int) * [self columnCount]); // 1 = pivot, 0 = free
     bzero(columnTypes, sizeof(int) * [self columnCount]);
@@ -336,7 +341,7 @@
             if ([answerReduced itemAtRow:row column:0] != 0) {
                 // there cannot be a solution; we can't make a non-zero here
                 return nil;
-            }
+            } else continue;
         }
         [solutionMatrix setItem:[answerReduced itemAtRow:row column:0] atRow:pivotColumn column:0];
     }
