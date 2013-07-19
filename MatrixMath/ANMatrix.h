@@ -9,8 +9,10 @@
 #import <Foundation/Foundation.h>
 
 @interface ANMatrix : NSObject <NSCopying> {
-    float ** matrixData;
+    double ** matrixData;
     int rowCount, columnCount;
+    
+    ANMatrix * lastWorkingMatrix;
 }
 
 + (ANMatrix *)identityMatrix:(int)size;
@@ -21,12 +23,12 @@
 - (int)rowCount;
 - (int)columnCount;
 
-- (float)itemAtRow:(int)row column:(int)column;
-- (void)setItem:(float)item atRow:(int)row column:(int)column;
+- (double)itemAtRow:(int)row column:(int)column;
+- (void)setItem:(double)item atRow:(int)row column:(int)column;
 - (void)setRows:(int)newRowCount columns:(int)newColumnCount;
 
 - (ANMatrix *)transpose;
-- (ANMatrix *)scale:(float)scalar;
+- (ANMatrix *)scale:(double)scalar;
 - (ANMatrix *)add:(ANMatrix *)anotherMatrix;
 
 - (ANMatrix *)multiply:(ANMatrix *)anotherMatrix;
